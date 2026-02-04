@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compliance Portal - CM Tax Experts</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* --- CSS Variables --- */
+    :root {
+      --bg-color: #fef2f2;
+      --surface-color: #ffffff;
+      --text-color: #1e293b;
+      --primary-color: #b91c1c;
+      --secondary-color: #dc2626;
+      --font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      box-sizing: border-box;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: var(--font-family);
+      margin: 0;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    html {
+      height: 100%;
+      scroll-behavior: smooth;
+    }
+
+    /* --- Navigation Styles --- */
+    nav {
+      background-color: var(--surface-color);
+      color: var(--text-color);
+    }
+
+    .nav-shadow {
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    /* --- Portal Specific Styles --- */
+    .page-header {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: white;
+      padding-top: 120px;
+      padding-bottom: 60px;
+      clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+    }
+
+    .card {
+        background-color: var(--surface-color);
+        border-radius: 1.5rem;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-top: 4px solid var(--primary-color);
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+
+    .service-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+    .service-item:last-child {
+        border-bottom: none;
+    }
+
+    .check-icon {
+        color: var(--secondary-color);
+        margin-right: 1rem;
+        flex-shrink: 0;
+    }
+
+    .portal-btn {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+    .portal-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 20px rgba(185, 28, 28, 0.3);
+    }
+
+    /* --- Footer Styles --- */
+    footer {
+        background-color: var(--surface-color);
+        border-top: 1px solid var(--bg-color);
+        margin-top: auto;
+    }
+  </style>
+ </head>
+ <body class="smooth-scroll">
+  
+  <nav class="w-full fixed top-0 left-0 z-50 nav-shadow">
+   <div class="max-w-7xl mx-auto px-6 py-4">
+    <div class="flex justify-between items-center">
+     <div class="flex items-center">
+      <a href="index.html">
+        <img src="logored.png" alt="CM Tax Experts Logo" class="w-14 h-14 rounded-2xl object-contain mr-3">
+      </a>
+      <div>
+       <div id="nav-company-name" class="text-xl font-bold leading-tight">
+        CM Tax Experts
+       </div>
+       <div id="nav-tagline" class="text-xs opacity-60">
+        Experts in Compliance
+       </div>
+      </div>
+     </div>
+     
+     <div class="hidden lg:flex space-x-6 text-sm xl:text-base">
+      <a href="index.html" class="font-semibold hover:opacity-70 transition-opacity">Home</a>
+      <a href="index.html#contact" class="font-semibold hover:opacity-70 transition-opacity">Contact Us</a>
+     </div>
+     
+     <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+     </button>
+    </div>
+    
+    <div id="mobile-menu" class="hidden lg:hidden mt-4 pb-4 space-y-3">
+     <a href="index.html" class="block font-semibold hover:opacity-70 transition-opacity">Home</a>
+     <a href="index.html#contact" class="block font-semibold hover:opacity-70 transition-opacity">Contact Us</a>
+    </div>
+   </div>
+  </nav>
+
+  <header class="page-header w-full text-center px-6">
+      <div class="max-w-4xl mx-auto">
+          <h1 class="text-4xl md:text-5xl font-bold mb-4">Compliance Portal</h1>
+          <p class="text-lg opacity-90">Manage your business services, returns, and payments in one place.</p>
+      </div>
+  </header>
+
+  <main class="w-full py-16 px-6 flex-grow">
+      <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12">
+          
+          <div>
+              <h2 class="text-2xl font-bold mb-6 flex items-center">
+                  <span class="w-2 h-8 bg-red-700 rounded-full mr-3"></span>
+                  Professional Services
+              </h2>
+              <div class="card p-8">
+                  <div class="flex flex-col">
+                      <div class="service-item">
+                          <svg class="check-icon w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                          <span class="font-semibold text-lg">GST</span>
+                      </div>
+                      <div class="service-item">
+                          <svg class="check-icon w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                          <span class="font-semibold text-lg">Income Tax</span>
+                      </div>
+                      <div class="service-item">
+                          <svg class="check-icon w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                          <span class="font-semibold text-lg">Trademark</span>
+                      </div>
+                      <div class="service-item">
+                          <svg class="check-icon w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                          <span class="font-semibold text-lg">Accounting Services</span>
+                      </div>
+                      <div class="service-item">
+                          <svg class="check-icon w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                          <span class="font-semibold text-lg">Audit</span>
+                      </div>
+                      <div class="service-item">
+                          <svg class="check-icon w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                          <span class="font-semibold text-lg">Business Registration & Consulting</span>
+                      </div>
+                      <div class="service-item bg-red-50 rounded-lg border-none mt-2">
+                          <svg class="check-icon w-6 h-6 text-red-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                          <span class="font-bold text-lg text-red-800">CM ERP Customised Accounting App</span>
+                      </div>
+                      <div class="service-item">
+                          <svg class="check-icon w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                          <span class="font-semibold text-lg">Others</span>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="flex flex-col space-y-8">
+              
+              <div>
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                      <span class="w-2 h-8 bg-red-700 rounded-full mr-3"></span>
+                      Client Actions
+                  </h2>
+                  <div class="card p-8 text-center">
+                      <p class="text-lg mb-6 opacity-80">Already a client? Click below to access the GST Return portal.</p>
+                      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdhIT1sBb0nv8VEpbSNy-avlektR5RdLEooXBaXq927mtM-Fg/viewform?usp=sharing&ouid=108782807367291057416" target="_blank" class="portal-btn inline-block px-8 py-4 rounded-full font-bold text-lg shadow-xl w-full md:w-auto">
+                          GST Return for Existing Clients
+                      </a>
+                  </div>
+              </div>
+
+              <div>
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                      <span class="w-2 h-8 bg-red-700 rounded-full mr-3"></span>
+                      Quick Payment
+                  </h2>
+                  <div class="card p-8 flex flex-col items-center justify-center">
+                      <p class="mb-4 font-semibold text-gray-600">Scan to Pay via UPI</p>
+                      
+                      <div class="bg-white p-2 rounded-xl shadow-inner border border-gray-200 mb-6">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi%3A%2F%2Fpay%3Fpa%3Dcmtaxexperts%40ybl%26pn%3DCM%2520Tax%2520Experts%26cu%3DINR" 
+                             alt="Payment QR Code" 
+                             class="w-48 h-48 md:w-56 md:h-56">
+                      </div>
+
+                      <div class="text-center">
+                          <p class="text-sm text-gray-500 mb-1">UPI ID</p>
+                          <div class="flex items-center justify-center space-x-2 bg-gray-100 px-4 py-2 rounded-lg">
+                              <span class="font-mono font-bold text-lg text-gray-800">cmtaxexperts@ybl</span>
+                          </div>
+                      </div>
+                      
+                      <a href="upi://pay?pa=cmtaxexperts@ybl&pn=CM%20Tax%20Experts" class="mt-6 text-red-700 font-bold hover:underline md:hidden">
+                          Click to Pay on Mobile App
+                      </a>
+                  </div>
+              </div>
+
+          </div>
+      </div>
+  </main>
+
+  <footer class="w-full py-8 px-6">
+   <div class="max-w-7xl mx-auto text-center">
+    <p class="opacity-70">© 2026 CM Tax Experts. All rights reserved.</p>
+   </div>
+  </footer>
+
+  <script>
+    document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+  </script>
+ </body>
+</html>

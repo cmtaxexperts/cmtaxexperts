@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Manager - CM Tax Experts</title>
+    <link rel="icon" type="image/png" href="https://cmtaxexperts.com/LOGOFAVICON.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #b91c1c; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .form-group label { font-size: 0.75rem; font-weight: 700; color: #4b5563; margin-bottom: 2px; display: block; }
+        .form-input { width: 100%; border: 1px solid #d1d5db; border-radius: 0.375rem; padding: 0.5rem; font-size: 0.875rem; }
+        .form-input:focus { outline: none; border-color: #b91c1c; ring: 1px solid #b91c1c; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col font-sans text-slate-800">
+
+    <nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <img src="https://cmtaxexperts.com/LOGOWEBSITE.png" alt="Logo" class="h-10 w-10 rounded mr-3">
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-900">CM Tax Experts</h1>
+                        <p class="text-xs text-red-700 font-bold uppercase">Client Management System</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="openModal('add')" class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center shadow-md transition">
+                        <i class="fas fa-plus mr-2"></i> Add Client
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-[95%] mx-auto py-6 w-full">
+        
+        <div class="bg-white rounded-xl shadow-sm p-4 mb-6 border border-gray-100 flex flex-col md:flex-row gap-4 justify-between items-center">
+            <div class="relative w-full md:w-96">
+                <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                <input type="text" id="searchInput" placeholder="Search by Name, ID, PAN, GST..." class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg w-full focus:outline-none focus:border-red-500 transition">
+            </div>
+            <div class="text-sm text-gray-500 font-medium" id="recordCount">Loading records...</div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">ID</th>
+                            <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Client Name</th>
+                            <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Branch</th>
+                            <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Mobile / Email</th>
+                            <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Tax Info (PAN/GST)</th>
+                            <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Folder</th>
+                            <th class="px-4 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody" class="bg-white divide-y divide-gray-200 text-sm">
+                        <tr><td colspan="7" class="px-6 py-10 text-center"><div class="flex justify-center"><div class="loader"></div></div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <div id="clientModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden z-50 flex items-center justify-center backdrop-blur-sm overflow-y-auto">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl m-4 my-8 relative">
+            
+            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50 rounded-t-xl">
+                <h3 class="text-lg font-bold text-gray-800" id="modalTitle">Add New Client</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-red-600 transition"><i class="fas fa-times text-xl"></i></button>
+            </div>
+
+            <form id="clientForm" class="p-6">
+                <input type="hidden" id="rowIndex"> <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div class="form-group">
+                        <label>Client ID</label>
+                        <input type="text" id="Client_ID" name="Client_ID" class="form-input bg-gray-100 font-mono font-bold text-red-700" readonly>
+                    </div>
+                    <div class="form-group md:col-span-2">
+                        <label>Client Name <span class="text-red-500">*</span></label>
+                        <input type="text" id="Client_Name" name="Client_Name" class="form-input" required>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div class="form-group">
+                        <label>Branch</label>
+                        <select id="Branch" name="Branch" class="form-input">
+                            <option value="CMTE">CMTE</option>
+                            <option value="ACT">ACT</option>
+                            <option value="CMbooks">CMbooks</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Reference</label>
+                        <input type="text" id="Reference" name="Reference" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Constitution</label>
+                        <select id="Constitution" name="Constitution" class="form-input">
+                            <option value="Individual">Individual</option>
+                            <option value="Proprietorship">Proprietorship</option>
+                            <option value="Partnership">Partnership</option>
+                            <option value="LLP">LLP</option>
+                            <option value="Private Limited">Private Limited</option>
+                            <option value="Trust">Trust</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="form-group">
+                        <label>Legal / Trade Name</label>
+                        <input type="text" id="Legal_Name" name="Legal_Name" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Date of Birth / Constitution</label>
+                        <input type="date" id="DOB" name="DOB" class="form-input">
+                    </div>
+                </div>
+
+                <div class="p-3 bg-red-50 rounded-lg border border-red-100 mb-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="form-group">
+                        <label>PAN Number</label>
+                        <input type="text" id="Pan_No" name="Pan_No" class="form-input uppercase" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" placeholder="ABCDE1234F" oninput="this.value = this.value.toUpperCase()">
+                    </div>
+                    <div class="form-group">
+                        <label>Aadhaar Number</label>
+                        <input type="text" id="Adhar_No" name="Adhar_No" class="form-input" pattern="\d{12}" placeholder="12 Digit Number">
+                    </div>
+                    <div class="form-group">
+                        <label>GST Number</label>
+                        <input type="text" id="GST_No" name="GST_No" class="form-input uppercase" oninput="this.value = this.value.toUpperCase()">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="form-group">
+                        <label>Mobile No (+91)</label>
+                        <div class="flex">
+                            <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm font-bold">+91</span>
+                            <input type="tel" id="Mobile_No" name="Mobile_No" class="form-input rounded-l-none" pattern="[0-9]{10}" placeholder="9876543210">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email ID</label>
+                        <input type="email" id="Email" name="Email" class="form-input">
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-xs font-bold text-gray-500 mb-2">Address Details</label>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                        <input type="text" id="addr_bldg" placeholder="Bldg No" class="form-input">
+                        <input type="text" id="addr_name" placeholder="Building Name" class="form-input md:col-span-3">
+                        <input type="text" id="addr_area" placeholder="Area" class="form-input md:col-span-2">
+                        <input type="text" id="addr_po" placeholder="Post Office" class="form-input md:col-span-2">
+                        <input type="text" id="addr_dist" placeholder="District" class="form-input md:col-span-2">
+                        <input type="text" id="addr_state" placeholder="State" class="form-input">
+                        <input type="text" id="addr_pin" placeholder="Pin Code" class="form-input">
+                    </div>
+                    <input type="hidden" id="Address" name="Address"> </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="form-group">
+                        <label>Google Drive Link</label>
+                        <input type="url" id="Folder_Link" name="Folder_Link" class="form-input text-blue-600" placeholder="https://drive.google.com/...">
+                    </div>
+                    <div class="form-group">
+                        <label>Notes</label>
+                        <input type="text" id="Notes" name="Notes" class="form-input">
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition font-semibold">Cancel</button>
+                    <button type="submit" id="submitBtn" class="px-6 py-2 bg-red-700 text-white rounded-lg hover:bg-red-800 transition font-bold shadow-md flex items-center">
+                        <i class="fas fa-save mr-2"></i> Save Client
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // *** CONFIGURATION ***
+        const SCRIPT_URL = "PASTE_YOUR_WEB_APP_URL_HERE"; // <--- PASTE GAS URL HERE
+        
+        let allData = [];
+        let nextClientId = "";
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', fetchData);
+
+        // Fetch Data from Google Sheet
+        async function fetchData() {
+            try {
+                const response = await fetch(SCRIPT_URL);
+                const json = await response.json();
+                allData = json.data;
+                nextClientId = json.nextId;
+                renderTable(allData);
+                document.getElementById('recordCount').innerText = `${allData.length} records found`;
+            } catch (error) {
+                console.error("Error:", error);
+                document.getElementById('tableBody').innerHTML = `<tr><td colspan="7" class="text-center py-4 text-red-500">Failed to load data. Please check connection.</td></tr>`;
+            }
+        }
+
+        // Render Table
+        function renderTable(data) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = "";
+
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-gray-400">No clients found</td></tr>`;
+                return;
+            }
+
+            data.forEach(client => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-50 transition";
+                tr.innerHTML = `
+                    <td class="px-4 py-3 font-mono font-bold text-red-700">${client.Client_ID || ''}</td>
+                    <td class="px-4 py-3">
+                        <div class="font-bold text-gray-900">${client.Client_Name}</div>
+                        <div class="text-xs text-gray-500">${client.Legal_Name || ''}</div>
+                    </td>
+                    <td class="px-4 py-3"><span class="px-2 py-1 bg-gray-100 rounded text-xs font-bold text-gray-600">${client.Branch || '-'}</span></td>
+                    <td class="px-4 py-3 text-gray-600">
+                        <div><i class="fas fa-phone text-xs mr-1 text-gray-400"></i> ${client.Mobile_No || ''}</div>
+                        <div><i class="fas fa-envelope text-xs mr-1 text-gray-400"></i> ${client.Email || ''}</div>
+                    </td>
+                    <td class="px-4 py-3 text-xs font-mono">
+                        ${client.Pan_No ? `<div title="PAN">P: ${client.Pan_No}</div>` : ''}
+                        ${client.GST_No ? `<div title="GST" class="text-blue-600">G: ${client.GST_No}</div>` : ''}
+                    </td>
+                    <td class="px-4 py-3 text-center">
+                        ${client.Folder_Link ? `<a href="${client.Folder_Link}" target="_blank" class="text-red-600 hover:text-red-800 text-lg"><i class="fab fa-google-drive"></i></a>` : '<span class="text-gray-300">-</span>'}
+                    </td>
+                    <td class="px-4 py-3 text-right space-x-2">
+                        <button onclick='openEditModal(${JSON.stringify(client)})' class="text-blue-500 hover:text-blue-700 p-1"><i class="fas fa-edit"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Search Logic
+        document.getElementById('searchInput').addEventListener('keyup', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = allData.filter(item => 
+                (item.Client_Name && item.Client_Name.toLowerCase().includes(term)) ||
+                (item.Client_ID && item.Client_ID.toLowerCase().includes(term)) ||
+                (item.Pan_No && item.Pan_No.toLowerCase().includes(term)) ||
+                (item.GST_No && item.GST_No.toLowerCase().includes(term))
+            );
+            renderTable(filtered);
+        });
+
+        // Modal Logic
+        function openModal(mode) {
+            const modal = document.getElementById('clientModal');
+            const form = document.getElementById('clientForm');
+            const title = document.getElementById('modalTitle');
+            
+            form.reset(); // Clear form
+            
+            if (mode === 'add') {
+                title.innerText = "Add New Client";
+                document.getElementById('Client_ID').value = nextClientId;
+                document.getElementById('rowIndex').value = ""; // Empty means Add
+            }
+            
+            modal.classList.remove('hidden');
+        }
+
+        function openEditModal(client) {
+            openModal('edit');
+            document.getElementById('modalTitle').innerText = "Edit Client";
+            document.getElementById('rowIndex').value = client.rowIndex;
+
+            // Fill standard fields
+            const fields = ['Client_ID', 'Client_Name', 'Reference', 'Branch', 'Legal_Name', 'Constitution', 'Pan_No', 'Adhar_No', 'GST_No', 'Mobile_No', 'Email', 'Folder_Link', 'Notes'];
+            fields.forEach(f => {
+                if(document.getElementById(f)) document.getElementById(f).value = client[f] || '';
+            });
+
+            // Date formatting for input type="date"
+            if(client.DOB) {
+                // Assuming sheet date format needs conversion or is ISO string
+                // Simple attempt:
+                let d = new Date(client.DOB);
+                if(!isNaN(d)) {
+                   document.getElementById('DOB').value = d.toISOString().split('T')[0];
+                } else {
+                   // If date is stored as string in sheet
+                   document.getElementById('DOB').value = client.DOB; 
+                }
+            }
+
+            // Split Address back to sub-fields (Simple logic assuming format: "Bldg, Name, Area, PO, Dist, State - Pin")
+            if(client.Address) {
+                const parts = client.Address.split(', ');
+                if(parts.length > 0) document.getElementById('addr_bldg').value = parts[0] || '';
+                if(parts.length > 1) document.getElementById('addr_name').value = parts[1] || '';
+                if(parts.length > 2) document.getElementById('addr_area').value = parts[2] || '';
+                if(parts.length > 3) document.getElementById('addr_po').value = parts[3] || '';
+                if(parts.length > 4) document.getElementById('addr_dist').value = parts[4] || '';
+                
+                // Handle State - Pin
+                const lastPart = parts[parts.length-1];
+                if(lastPart.includes('-')) {
+                    const sp = lastPart.split(' - ');
+                    document.getElementById('addr_state').value = sp[0] || '';
+                    document.getElementById('addr_pin').value = sp[1] || '';
+                }
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('clientModal').classList.add('hidden');
+        }
+
+        // Handle Form Submit
+        document.getElementById('clientForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> Saving...`;
+            btn.disabled = true;
+
+            // Combine Address
+            const addrParts = [
+                document.getElementById('addr_bldg').value,
+                document.getElementById('addr_name').value,
+                document.getElementById('addr_area').value,
+                document.getElementById('addr_po').value,
+                document.getElementById('addr_dist').value
+            ].filter(Boolean).join(', ');
+            
+            const state = document.getElementById('addr_state').value;
+            const pin = document.getElementById('addr_pin').value;
+            const fullAddr = addrParts + (state ? `, ${state}` : '') + (pin ? ` - ${pin}` : '');
+            
+            document.getElementById('Address').value = fullAddr;
+
+            // Prepare Data
+            const formData = new FormData(e.target);
+            const dataObj = Object.fromEntries(formData.entries());
+            
+            // Determine Action
+            const rowIndex = document.getElementById('rowIndex').value;
+            dataObj.action = rowIndex ? "edit" : "add";
+            if(rowIndex) dataObj.rowIndex = rowIndex;
+
+            try {
+                // Send to Google Sheet
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(dataObj)
+                });
+
+                // Success
+                closeModal();
+                fetchData(); // Reload table
+                // alert("Saved Successfully!");
+            } catch (error) {
+                console.error(error);
+                alert("Error saving data.");
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

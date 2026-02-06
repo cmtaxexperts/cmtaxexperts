@@ -9,437 +9,362 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         /* --- CORE THEME: RED & GREY --- */
-        :root {
-            --primary: #1e293b; 
-            --accent: #b91c1c;   
-            --bg-light: #f8fafc; 
-        }
+        :root { --primary: #1e293b; --accent: #b91c1c; --bg-light: #f8fafc; }
         body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background-color: var(--bg-light); color: var(--primary); }
-        
-        /* Utilities */
-        .card-hover { transition: transform 0.2s, box-shadow 0.2s; }
-        .card-hover:active { transform: scale(0.98); }
+        .card-hover { transition: transform 0.2s, box-shadow 0.2s; } .card-hover:active { transform: scale(0.98); }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .loader { width: 20px; height: 20px; border: 2px solid #e2e8f0; border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .fade-in { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Buttons */
         .btn-red { @apply bg-red-700 hover:bg-red-800 text-white font-bold shadow-sm transition; }
         .btn-outline { @apply bg-white border border-gray-200 text-slate-700 font-bold shadow-sm hover:bg-gray-50 transition; }
     </style>
 </head>
 <body class="h-screen overflow-hidden flex flex-col">
 
-    <div id="view-app" class="flex flex-col h-full">
+    <header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-4 z-40 shrink-0">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="app.nav('dashboard')">
+            <img src="logocmbooks.png" class="w-10 h-10 object-contain">
+            <div>
+                <h2 class="text-lg font-bold text-slate-800 leading-tight">CMbooks</h2>
+                <p id="page-title" class="text-[10px] text-red-700 font-bold uppercase tracking-wider">Dashboard</p>
+            </div>
+        </div>
+        <button onclick="location.reload()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-slate-400 transition"><i class="fas fa-sync-alt"></i></button>
+    </header>
+
+    <main class="flex-grow overflow-y-auto relative bg-slate-50 hide-scrollbar p-4">
         
-        <header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-4 z-40 shrink-0">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="app.nav('dashboard')">
-                <img src="logocmbooks.png" class="w-10 h-10 object-contain">
-                <div>
-                    <h2 class="text-lg font-bold text-slate-800 leading-tight">CMbooks</h2>
-                    <p id="page-title" class="text-[10px] text-red-700 font-bold uppercase tracking-wider">Dashboard</p>
+        <div id="mod-dashboard" class="fade-in max-w-5xl mx-auto pt-6">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                <div onclick="app.nav('clients')" class="card-hover bg-white p-6 rounded-2xl shadow-sm border border-slate-100 cursor-pointer flex flex-col items-center justify-center gap-4 h-40">
+                    <div class="w-14 h-14 rounded-full bg-red-50 text-red-700 flex items-center justify-center text-2xl"><i class="fas fa-users"></i></div><span class="font-bold text-slate-700">Client Data</span>
+                </div>
+                <div onclick="app.nav('compliance')" class="card-hover bg-white p-6 rounded-2xl shadow-sm border border-slate-100 cursor-pointer flex flex-col items-center justify-center gap-4 h-40">
+                    <div class="w-14 h-14 rounded-full bg-red-50 text-red-700 flex items-center justify-center text-2xl"><i class="fas fa-file-contract"></i></div><span class="font-bold text-slate-700">Compliance</span>
+                </div>
+                <div onclick="app.nav('accounts')" class="card-hover bg-white p-6 rounded-2xl shadow-sm border border-slate-100 cursor-pointer flex flex-col items-center justify-center gap-4 h-40">
+                    <div class="w-14 h-14 rounded-full bg-red-50 text-red-700 flex items-center justify-center text-2xl"><i class="fas fa-calculator"></i></div><span class="font-bold text-slate-700">Accounts</span>
+                </div>
+                <div onclick="app.nav('daybook')" class="card-hover bg-white p-6 rounded-2xl shadow-sm border border-slate-100 cursor-pointer flex flex-col items-center justify-center gap-4 h-40">
+                    <div class="w-14 h-14 rounded-full bg-red-50 text-red-700 flex items-center justify-center text-2xl"><i class="fas fa-book-open"></i></div><span class="font-bold text-slate-700">Day Book</span>
+                </div>
+                <div onclick="app.nav('credentials')" class="card-hover bg-white p-6 rounded-2xl shadow-sm border border-slate-100 cursor-pointer flex flex-col items-center justify-center gap-4 h-40">
+                    <div class="w-14 h-14 rounded-full bg-red-50 text-red-700 flex items-center justify-center text-2xl"><i class="fas fa-key"></i></div><span class="font-bold text-slate-700">Credentials</span>
+                </div>
+                <div onclick="app.nav('invoice_menu')" class="card-hover bg-white p-6 rounded-2xl shadow-sm border border-slate-100 cursor-pointer flex flex-col items-center justify-center gap-4 h-40">
+                    <div class="w-14 h-14 rounded-full bg-red-50 text-red-700 flex items-center justify-center text-2xl"><i class="fas fa-file-invoice-dollar"></i></div><span class="font-bold text-slate-700">Invoice</span>
                 </div>
             </div>
-            <button onclick="location.reload()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-slate-400 transition" title="Refresh">
-                <i class="fas fa-sync-alt"></i>
-            </button>
-        </header>
+        </div>
 
-        <main class="flex-grow overflow-y-auto relative bg-slate-50 hide-scrollbar p-4">
-            
-            <div id="mod-dashboard" class="fade-in max-w-5xl mx-auto pt-6">
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
-                    <div onclick="app.nav('clients')" class="card-hover bg-white p-6 rounded-2xl shadow-sm border border-slate-100 cursor-pointer flex flex-col items-center justify-center gap-4 h-40">
-                        <div class="w-14 h-14 rounded-full bg-red-50 text-red-700 flex items-center justify-center text-2xl"><i class="fas fa-users"></i></div>
-                        <span class="font-bold text-slate-700">Client Data</span>
-                    </div>
-                    <div onclick="app.nav('accounts')" class="card-hover bg-white p-6 rounded-2xl shadow-sm border border-slate-100 cursor-pointer flex flex-col items-center justify-center gap-4 h-40">
-                        <div class="w-14 h-14 rounded-full bg-red-50 text-red-700 flex items-center justify-center text-2xl"><i class="fas fa-calculator"></i></div>
-                        <span class="font-bold text-slate-700">Accounts</span>
-                    </div>
-                    <div onclick="app.nav('compliance')" class="card-hover bg-white p-6 rounded-2xl shadow-sm border border-slate-100 cursor-pointer flex flex-col items-center justify-center gap-4 h-40">
-                        <div class="w-14 h-14 rounded-full bg-red-50 text-red-700 flex items-center justify-center text-2xl"><i class="fas fa-file-contract"></i></div>
-                        <span class="font-bold text-slate-700">Compliance</span>
-                    </div>
-                    <div onclick="app.nav('invoice')" class="card-hover bg-white p-6 rounded-2xl shadow-sm border border-slate-100 cursor-pointer flex flex-col items-center justify-center gap-4 h-40">
-                        <div class="w-14 h-14 rounded-full bg-red-50 text-red-700 flex items-center justify-center text-2xl"><i class="fas fa-file-invoice-dollar"></i></div>
-                        <span class="font-bold text-slate-700">Invoice</span>
-                    </div>
-                    <div onclick="app.nav('credentials')" class="card-hover bg-white p-6 rounded-2xl shadow-sm border border-slate-100 cursor-pointer flex flex-col items-center justify-center gap-4 h-40">
-                        <div class="w-14 h-14 rounded-full bg-red-50 text-red-700 flex items-center justify-center text-2xl"><i class="fas fa-key"></i></div>
-                        <span class="font-bold text-slate-700">Credentials</span>
-                    </div>
-                    <div onclick="app.nav('payment')" class="card-hover bg-white p-6 rounded-2xl shadow-sm border border-slate-100 cursor-pointer flex flex-col items-center justify-center gap-4 h-40">
-                        <div class="w-14 h-14 rounded-full bg-red-50 text-red-700 flex items-center justify-center text-2xl"><i class="fas fa-link"></i></div>
-                        <span class="font-bold text-slate-700">Payment Link</span>
-                    </div>
+        <div id="mod-clients" class="hidden fade-in h-full flex flex-col">
+            <div class="flex flex-col md:flex-row gap-3 mb-4 sticky top-0 z-10 bg-slate-50 pb-2">
+                <input type="text" id="search-clients" placeholder="Search Clients..." class="flex-grow w-full pl-4 pr-4 py-2 bg-white border rounded-lg text-sm shadow-sm">
+                <button onclick="clients.openModal('add')" class="btn-red px-4 py-2 rounded-lg text-sm">+ Client</button>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex-grow overflow-hidden relative">
+                <div class="absolute inset-0 overflow-auto">
+                    <table class="w-full text-left border-collapse"><tbody id="table-clients" class="text-sm"></tbody></table>
                 </div>
             </div>
+        </div>
 
-            <div id="mod-invoice" class="hidden fade-in h-full flex flex-col items-center justify-center">
-                 <div class="max-w-2xl w-full space-y-8 text-center">
-                    <h2 class="text-2xl font-bold text-slate-800">Invoice Management</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <a href="https://docs.google.com/spreadsheets/d/1ZvjCfys0_XAcfM339HfB5_9X8TpBzt_3eP3dKzdLIMc/edit#gid=897038703" target="_blank" class="card-hover bg-white p-8 rounded-2xl shadow-sm border border-slate-100 cursor-pointer flex flex-col items-center justify-center gap-4 group">
-                            <div class="w-16 h-16 rounded-full bg-red-50 text-red-700 group-hover:bg-red-700 group-hover:text-white transition flex items-center justify-center text-3xl"><i class="fas fa-plus"></i></div>
-                            <span class="font-bold text-slate-700 text-lg">Add Invoice</span>
-                            <span class="text-xs text-slate-400">(Opens Sheet Template)</span>
-                        </a>
-                        <div onclick="alert('Statement feature coming soon.')" class="card-hover bg-white p-8 rounded-2xl shadow-sm border border-slate-100 cursor-pointer flex flex-col items-center justify-center gap-4 opacity-60 grayscale">
-                            <div class="w-16 h-16 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center text-3xl"><i class="fas fa-list-alt"></i></div>
-                            <span class="font-bold text-slate-700 text-lg">View Statement</span>
-                             <span class="text-xs text-slate-400">(Coming Soon)</span>
-                        </div>
-                    </div>
-                    <button onclick="app.nav('dashboard')" class="px-8 py-3 btn-outline rounded-xl text-sm">Go Back to Dashboard</button>
-                 </div>
+        <div id="mod-credentials" class="hidden fade-in h-full flex flex-col">
+            <div class="flex flex-col md:flex-row gap-3 mb-4 sticky top-0 z-10 bg-slate-50 pb-2">
+                <input type="text" id="search-creds" placeholder="Search Credentials..." class="flex-grow w-full pl-4 pr-4 py-2 bg-white border rounded-lg text-sm shadow-sm">
+                <button onclick="openGenericModal('creds')" class="btn-red px-4 py-2 rounded-lg text-sm">+ Credential</button>
             </div>
-
-            <div id="mod-clients" class="hidden fade-in h-full flex flex-col">
-                <div class="flex flex-col md:flex-row gap-3 mb-4 sticky top-0 z-10 bg-slate-50 pb-2">
-                    <div class="relative flex-grow">
-                        <i class="fas fa-search absolute left-3 top-3 text-gray-400 text-xs"></i>
-                        <input type="text" id="search-clients" placeholder="Search Clients..." class="w-full pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-lg text-sm shadow-sm focus:outline-none focus:border-red-500">
-                    </div>
-                    <button onclick="clients.openModal('add')" class="btn-red px-4 py-2 rounded-lg text-sm">+ New Client</button>
-                </div>
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex-grow overflow-hidden relative">
-                    <div class="absolute inset-0 overflow-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead class="bg-slate-50 text-xs font-bold text-slate-500 uppercase sticky top-0">
-                                <tr>
-                                    <th class="p-3 border-b">ID</th>
-                                    <th class="p-3 border-b">Client Info</th>
-                                    <th class="p-3 border-b hidden md:table-cell">Contact</th>
-                                    <th class="p-3 border-b hidden md:table-cell">Tax Info</th>
-                                    <th class="p-3 border-b text-center">Drive</th>
-                                    <th class="p-3 border-b text-right">Edit</th>
-                                </tr>
-                            </thead>
-                            <tbody id="table-clients" class="text-sm text-slate-700 divide-y divide-gray-100">
-                                <tr><td colspan="6" class="p-8 text-center"><div class="inline-block loader"></div></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex-grow overflow-hidden relative">
+                <div class="absolute inset-0 overflow-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead class="bg-slate-50 text-xs font-bold text-slate-500 uppercase sticky top-0">
+                            <tr><th class="p-3 border-b">Client</th><th class="p-3 border-b">Portal</th><th class="p-3 border-b">User/Pass</th><th class="p-3 border-b text-right">Action</th></tr>
+                        </thead>
+                        <tbody id="table-creds" class="divide-y divide-gray-100"></tbody>
+                    </table>
                 </div>
             </div>
+        </div>
 
-            <div id="mod-accounts" class="hidden fade-in h-full flex flex-col">
-                <div class="grid grid-cols-3 gap-2 mb-4">
-                    <div class="bg-white p-3 rounded-xl border-l-4 border-green-500 shadow-sm">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase">Income</p>
-                        <p id="acc-inc" class="text-lg font-bold text-green-700">₹0</p>
-                    </div>
-                    <div class="bg-white p-3 rounded-xl border-l-4 border-red-500 shadow-sm">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase">Expense</p>
-                        <p id="acc-exp" class="text-lg font-bold text-red-700">₹0</p>
-                    </div>
-                    <div class="bg-white p-3 rounded-xl border-l-4 border-blue-500 shadow-sm">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase">Balance</p>
-                        <p id="acc-bal" class="text-lg font-bold text-slate-800">₹0</p>
-                    </div>
-                </div>
-                <div class="flex gap-3 mb-4 sticky top-0 z-10 bg-slate-50 pb-2">
-                    <div class="relative flex-grow">
-                        <i class="fas fa-search absolute left-3 top-3 text-gray-400 text-xs"></i>
-                        <input type="text" id="search-accounts" placeholder="Search..." class="w-full pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-lg text-sm shadow-sm focus:outline-none focus:border-red-500">
-                    </div>
-                    <button onclick="accounts.openModal('add')" class="btn-red px-4 py-2 rounded-lg text-sm whitespace-nowrap">+ Entry</button>
-                </div>
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex-grow overflow-hidden relative">
-                    <div class="absolute inset-0 overflow-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead class="bg-slate-50 text-xs font-bold text-slate-500 uppercase sticky top-0">
-                                <tr>
-                                    <th class="p-3 border-b">Date</th>
-                                    <th class="p-3 border-b">Particulars</th>
-                                    <th class="p-3 border-b text-right">Amount</th>
-                                    <th class="p-3 border-b text-center">Doc</th>
-                                    <th class="p-3 border-b text-right">Edit</th>
-                                </tr>
-                            </thead>
-                            <tbody id="table-accounts" class="text-sm text-slate-700 divide-y divide-gray-100">
-                                <tr><td colspan="5" class="p-8 text-center"><div class="inline-block loader"></div></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+        <div id="mod-compliance" class="hidden fade-in h-full flex flex-col">
+            <div class="flex flex-col md:flex-row gap-3 mb-4 sticky top-0 z-10 bg-slate-50 pb-2">
+                <input type="text" id="search-comp" placeholder="Search Service..." class="flex-grow w-full pl-4 pr-4 py-2 bg-white border rounded-lg text-sm shadow-sm">
+                <button onclick="openGenericModal('comp')" class="btn-red px-4 py-2 rounded-lg text-sm">+ Task</button>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex-grow overflow-hidden relative">
+                <div class="absolute inset-0 overflow-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead class="bg-slate-50 text-xs font-bold text-slate-500 uppercase sticky top-0">
+                            <tr><th class="p-3 border-b">Client</th><th class="p-3 border-b">Service</th><th class="p-3 border-b">Due</th><th class="p-3 border-b text-center">Status</th></tr>
+                        </thead>
+                        <tbody id="table-comp" class="divide-y divide-gray-100"></tbody>
+                    </table>
                 </div>
             </div>
+        </div>
 
-            <div id="mod-placeholder" class="hidden h-full flex items-center justify-center flex-col text-center opacity-60">
-                <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-gray-400">
-                    <i id="ph-icon" class="fas fa-tools text-4xl"></i>
+        <div id="mod-daybook" class="hidden fade-in h-full flex flex-col">
+            <div class="grid grid-cols-3 gap-2 mb-4">
+                <div class="bg-white p-3 rounded-xl border-l-4 border-green-500 shadow-sm"><p class="text-[10px] uppercase text-gray-400">In</p><p id="db-inc" class="font-bold text-green-700">₹0</p></div>
+                <div class="bg-white p-3 rounded-xl border-l-4 border-red-500 shadow-sm"><p class="text-[10px] uppercase text-gray-400">Out</p><p id="db-exp" class="font-bold text-red-700">₹0</p></div>
+                <div class="bg-white p-3 rounded-xl border-l-4 border-blue-500 shadow-sm"><p class="text-[10px] uppercase text-gray-400">Net</p><p id="db-bal" class="font-bold text-slate-800">₹0</p></div>
+            </div>
+            <div class="flex flex-col md:flex-row gap-3 mb-4 sticky top-0 z-10 bg-slate-50 pb-2">
+                <input type="text" id="search-daybook" placeholder="Search Day Book..." class="flex-grow w-full pl-4 pr-4 py-2 bg-white border rounded-lg text-sm shadow-sm">
+                <button onclick="openGenericModal('daybook')" class="btn-red px-4 py-2 rounded-lg text-sm">+ Entry</button>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex-grow overflow-hidden relative">
+                <div class="absolute inset-0 overflow-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead class="bg-slate-50 text-xs font-bold text-slate-500 uppercase sticky top-0">
+                            <tr><th class="p-3 border-b">Date</th><th class="p-3 border-b">Client/Desc</th><th class="p-3 border-b text-right">Amount</th><th class="p-3 border-b text-center">Type</th></tr>
+                        </thead>
+                        <tbody id="table-daybook" class="divide-y divide-gray-100"></tbody>
+                    </table>
                 </div>
-                <h3 id="ph-title" class="text-xl font-bold text-slate-700 mb-1">Module</h3>
-                <p class="text-sm text-slate-400 mb-6">This module is under development.</p>
-                <button onclick="app.nav('dashboard')" class="px-6 py-2 btn-outline rounded-lg text-sm">Go Back</button>
             </div>
+        </div>
 
-        </main>
-    </div>
-
-    <div id="modal-client" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onclick="clients.closeModal()"></div>
-        <div class="absolute bottom-0 md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 w-full md:w-[600px] bg-white md:rounded-2xl rounded-t-2xl shadow-2xl flex flex-col max-h-[90vh]">
-            <div class="px-5 py-3 border-b border-gray-100 flex justify-between items-center">
-                <h3 class="font-bold text-slate-800" id="client-modal-title">Client Record</h3>
-                <button onclick="clients.closeModal()" class="text-gray-400 hover:text-red-700"><i class="fas fa-times"></i></button>
+        <div id="mod-accounts" class="hidden fade-in h-full flex flex-col">
+            <div class="flex gap-3 mb-4 sticky top-0 z-10 bg-slate-50 pb-2">
+                <input type="text" id="search-accounts" placeholder="Search Accounts..." class="flex-grow w-full pl-4 pr-4 py-2 bg-white border rounded-lg text-sm shadow-sm">
+                <button onclick="openGenericModal('accounts')" class="btn-red px-4 py-2 rounded-lg text-sm">+ Entry</button>
             </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex-grow overflow-hidden relative">
+                <div class="absolute inset-0 overflow-auto"><table class="w-full text-left"><tbody id="table-accounts" class="text-sm"></tbody></table></div>
+            </div>
+        </div>
+
+        <div id="mod-invoice_menu" class="hidden fade-in h-full flex flex-col items-center justify-center">
+             <div class="max-w-md w-full space-y-4">
+                <h2 class="text-xl font-bold text-slate-800 text-center mb-6">Invoice Management</h2>
+                <a href="https://docs.google.com/spreadsheets/d/1ZvjCfys0_XAcfM339HfB5_9X8TpBzt_3eP3dKzdLIMc/edit#gid=897038703" target="_blank" class="w-full card-hover bg-white p-6 rounded-2xl shadow-sm border border-red-100 flex items-center gap-4 group">
+                    <div class="w-12 h-12 rounded-full bg-red-700 text-white flex items-center justify-center text-xl"><i class="fas fa-plus"></i></div>
+                    <div class="text-left"><h3 class="font-bold text-slate-800">Create Invoice</h3><p class="text-xs text-slate-500">Open Template</p></div>
+                </a>
+                <button onclick="app.nav('dashboard')" class="w-full py-3 bg-white border border-gray-200 rounded-xl font-bold text-slate-600">Back</button>
+             </div>
+        </div>
+
+    </main>
+
+    <div id="modal-client" class="fixed inset-0 z-50 hidden bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="p-4 border-b flex justify-between"><h3 class="font-bold">Client</h3><button onclick="closeModal('client')"><i class="fas fa-times"></i></button></div>
             <form id="form-client" class="p-5 overflow-y-auto space-y-3">
                 <input type="hidden" id="c-rowIndex">
-                <div class="grid grid-cols-3 gap-3">
-                    <div class="col-span-1"><label class="text-[10px] font-bold text-gray-500 uppercase">ID</label><input type="text" id="Client_ID" name="Client_ID" class="w-full p-2 bg-red-50 border border-red-100 rounded text-xs font-mono font-bold text-red-700" readonly></div>
-                    <div class="col-span-2"><label class="text-[10px] font-bold text-gray-500 uppercase">Name *</label><input type="text" id="Client_Name" name="Client_Name" class="w-full p-2 border rounded text-xs font-bold focus:border-red-500 outline-none" required></div>
+                <div class="grid grid-cols-3 gap-2">
+                    <input type="text" id="Client_ID" name="Client_ID" class="p-2 bg-red-50 border rounded text-xs font-mono font-bold text-red-700" readonly>
+                    <input type="text" id="Client_Name" name="Client_Name" class="col-span-2 p-2 border rounded text-xs font-bold" placeholder="Name *" required>
                 </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div><label class="text-[10px] font-bold text-gray-500 uppercase">Branch</label><select id="Branch" name="Branch" class="w-full p-2 border rounded text-xs bg-white"><option value="CMTE">CMTE</option><option value="ACT">ACT</option><option value="CMbooks">CMbooks</option></select></div>
-                    <div><label class="text-[10px] font-bold text-gray-500 uppercase">Entity</label><select id="Constitution" name="Constitution" class="w-full p-2 border rounded text-xs bg-white"><option value="Individual">Individual</option><option value="Proprietorship">Proprietorship</option><option value="Partnership">Partnership</option><option value="LLP">LLP</option><option value="Private Limited">Pvt Ltd</option></select></div>
+                <div class="grid grid-cols-2 gap-2">
+                    <select id="Branch" name="Branch" class="p-2 border rounded text-xs"><option value="CMTE">CMTE</option><option value="ACT">ACT</option><option value="CMbooks">CMbooks</option></select>
+                    <select id="Constitution" name="Constitution" class="p-2 border rounded text-xs"><option value="Individual">Individual</option><option value="Proprietorship">Proprietorship</option></select>
                 </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div><label class="text-[10px] font-bold text-gray-500 uppercase">Mobile</label><input type="tel" id="Mobile_No" name="Mobile_No" class="w-full p-2 border rounded text-xs"></div>
-                    <div><label class="text-[10px] font-bold text-gray-500 uppercase">Email</label><input type="email" id="Email" name="Email" class="w-full p-2 border rounded text-xs"></div>
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="tel" id="Mobile_No" name="Mobile_No" placeholder="Mobile" class="p-2 border rounded text-xs">
+                    <input type="email" id="Email" name="Email" placeholder="Email" class="p-2 border rounded text-xs">
                 </div>
-                <div class="grid grid-cols-3 gap-2 bg-gray-50 p-2 rounded border border-gray-100">
-                    <div><label class="text-[10px] font-bold text-gray-500">PAN</label><input type="text" id="Pan_No" name="Pan_No" class="w-full p-1 border rounded text-xs uppercase font-mono"></div>
-                    <div><label class="text-[10px] font-bold text-gray-500">GST</label><input type="text" id="GST_No" name="GST_No" class="w-full p-1 border rounded text-xs uppercase font-mono"></div>
-                    <div><label class="text-[10px] font-bold text-gray-500">AADHAAR</label><input type="text" id="Adhar_No" name="Adhar_No" class="w-full p-1 border rounded text-xs font-mono"></div>
-                </div>
-                <div><label class="text-[10px] font-bold text-gray-500 uppercase">Address</label><textarea id="Address" name="Address" rows="2" class="w-full p-2 border rounded text-xs"></textarea></div>
-                <div><label class="text-[10px] font-bold text-gray-500 uppercase">Drive Link</label><input type="url" id="Folder_Link" name="Folder_Link" class="w-full p-2 border rounded text-xs text-blue-600"></div>
-                <input type="hidden" id="Reference" name="Reference"><input type="hidden" id="Legal_Name" name="Legal_Name"><input type="hidden" id="DOB" name="DOB"><input type="hidden" id="Notes" name="Notes">
-                <button type="submit" id="c-save-btn" class="w-full py-3 btn-red rounded-xl text-sm mt-2">Save Client</button>
+                <input type="text" id="GST_No" name="GST_No" placeholder="GSTIN" class="w-full p-2 border rounded text-xs uppercase">
+                <input type="text" id="Pan_No" name="Pan_No" placeholder="PAN" class="w-full p-2 border rounded text-xs uppercase">
+                <button type="submit" class="w-full py-3 btn-red rounded-xl text-sm">Save</button>
             </form>
         </div>
     </div>
 
-    <div id="modal-account" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onclick="accounts.closeModal()"></div>
-        <div class="absolute bottom-0 md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 w-full md:w-[500px] bg-white md:rounded-2xl rounded-t-2xl shadow-2xl flex flex-col max-h-[90vh]">
-            <div class="px-5 py-3 border-b border-gray-100 flex justify-between items-center">
-                <h3 class="font-bold text-slate-800" id="acc-modal-title">Transaction Entry</h3>
-                <button onclick="accounts.closeModal()" class="text-gray-400 hover:text-red-700"><i class="fas fa-times"></i></button>
-            </div>
-            <form id="form-account" class="p-5 overflow-y-auto space-y-3">
-                <input type="hidden" id="a-rowIndex">
-                <div class="grid grid-cols-2 gap-3">
-                    <div><label class="text-[10px] font-bold text-gray-500 uppercase">Date</label><input type="date" id="Date" name="Date" class="w-full p-2 border rounded text-xs" required></div>
-                    <div><label class="text-[10px] font-bold text-gray-500 uppercase">Type</label><select id="Txn_Type" name="Txn_Type" class="w-full p-2 border rounded text-xs"><option value="Income">Income (+)</option><option value="Expense">Expense (-)</option></select></div>
+    <div id="modal-generic" class="fixed inset-0 z-50 hidden bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="p-4 border-b flex justify-between"><h3 class="font-bold" id="gen-title">Entry</h3><button onclick="closeModal('generic')"><i class="fas fa-times"></i></button></div>
+            <form id="form-generic" class="p-5 overflow-y-auto space-y-3">
+                <input type="hidden" id="g-action">
+                <div><label class="text-[10px] font-bold uppercase text-gray-500">Client</label>
+                <select id="g-client" class="w-full p-2 border rounded text-xs" onchange="setClientName()"><option value="">Select...</option></select>
+                <input type="hidden" id="g-client-name"></div>
+
+                <div id="f-creds" class="hidden space-y-3">
+                    <input type="text" id="Portal_Name" name="Portal_Name" placeholder="Portal Name" class="w-full p-2 border rounded text-xs">
+                    <input type="text" id="User_ID" name="User_ID" placeholder="User ID" class="w-full p-2 border rounded text-xs">
+                    <input type="text" id="Password" name="Password" placeholder="Password" class="w-full p-2 border rounded text-xs">
                 </div>
-                <div><label class="text-[10px] font-bold text-gray-500 uppercase">Particulars *</label><input type="text" id="Particulars" name="Particulars" class="w-full p-2 border rounded text-xs font-bold focus:border-red-500 outline-none" required></div>
-                <div><label class="text-[10px] font-bold text-gray-500 uppercase">Client (Opt)</label><input type="text" id="a-Client_Name" name="Client_Name" class="w-full p-2 border rounded text-xs"></div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div><label class="text-[10px] font-bold text-gray-500 uppercase">Category</label><select id="Category" name="Category" class="w-full p-2 border rounded text-xs bg-white"><option value="Professional Fees">Prof. Fees</option><option value="Govt Fees">Govt Fees</option><option value="Office Expense">Expense</option><option value="Salary">Salary</option><option value="Other">Other</option></select></div>
-                    <div><label class="text-[10px] font-bold text-gray-500 uppercase">Amount *</label><input type="number" id="Amount" name="Amount" class="w-full p-2 border rounded text-xs font-bold text-slate-800" step="0.01" required></div>
+
+                <div id="f-comp" class="hidden space-y-3">
+                    <input type="text" id="Service_Description" name="Service_Description" placeholder="Service Name (e.g. GST Return)" class="w-full p-2 border rounded text-xs">
+                    <input type="date" id="Due_Date" name="Due_Date" class="w-full p-2 border rounded text-xs">
+                    <select id="Status" name="Status" class="w-full p-2 border rounded text-xs"><option value="Pending">Pending</option><option value="Done">Done</option></select>
                 </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div><label class="text-[10px] font-bold text-gray-500 uppercase">Mode</label><select id="Payment_Mode" name="Payment_Mode" class="w-full p-2 border rounded text-xs bg-white"><option value="Cash">Cash</option><option value="UPI">UPI</option><option value="Bank">Bank</option></select></div>
-                    <div><label class="text-[10px] font-bold text-gray-500 uppercase">Doc Link</label><input type="url" id="Doc_Link" name="Doc_Link" class="w-full p-2 border rounded text-xs text-blue-600"></div>
+
+                <div id="f-money" class="hidden space-y-3">
+                    <input type="date" id="g-Date" name="Date" class="w-full p-2 border rounded text-xs">
+                    <input type="text" id="Description" name="Description" placeholder="Description/Particulars" class="w-full p-2 border rounded text-xs">
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="number" id="Amount" name="Amount" placeholder="Amount" class="p-2 border rounded text-xs font-bold">
+                        <select id="Type" name="Type" class="p-2 border rounded text-xs"><option value="Income">Income (In)</option><option value="Expense">Expense (Out)</option></select>
+                    </div>
+                    <select id="Mode" name="Mode" class="w-full p-2 border rounded text-xs"><option value="Cash">Cash</option><option value="UPI">UPI</option><option value="Bank">Bank</option></select>
                 </div>
-                <input type="hidden" id="a-Notes" name="Notes">
-                <button type="submit" id="a-save-btn" class="w-full py-3 btn-red rounded-xl text-sm mt-2">Save Transaction</button>
+
+                <button type="submit" id="g-save-btn" class="w-full py-3 btn-red rounded-xl text-sm">Save</button>
             </form>
         </div>
     </div>
 
     <script>
-        // API CONFIGURATION
-        const API_URL = "https://script.google.com/macros/s/AKfycbzgYb_qht1HHfKQRgHEua0kiE46NjrToJCPF8C6AxI9vD8AlqSkMVWzqXphWfXFVbk_/exec";
+        // *** NEW URL ***
+        const API_URL = "https://script.google.com/macros/s/AKfycbwT6x4UwIfAX4ZO3zVTjGY3cY81mF5qTfunKI1rCDFGVjdJcVDMTePiFNKTsl2ukTzI/exec"; 
+        let clientList = [];
 
-        // APP CONTROLLER
         const app = {
             nav: (mod) => {
-                const modules = ['dashboard', 'clients', 'accounts', 'compliance', 'invoice', 'credentials', 'payment', 'placeholder'];
-                modules.forEach(m => {
-                    const el = document.getElementById('mod-' + (['compliance','credentials', 'payment'].includes(m) ? 'placeholder' : m));
-                    if(el) el.classList.add('hidden');
-                });
-
-                let title = mod.charAt(0).toUpperCase() + mod.slice(1);
-                document.getElementById('page-title').innerText = title;
-
-                if(['compliance', 'credentials', 'payment'].includes(mod)) {
-                    document.getElementById('mod-placeholder').classList.remove('hidden');
-                    document.getElementById('mod-placeholder').classList.add('flex');
-                    document.getElementById('ph-title').innerText = title + " Module";
-                    const icons = { compliance: 'fa-file-contract', credentials: 'fa-key', payment: 'fa-link' };
-                    document.getElementById('ph-icon').className = `fas ${icons[mod]} text-5xl mb-4 text-gray-300`;
-                } else {
-                    document.getElementById('mod-' + mod).classList.remove('hidden');
-                    if(mod === 'clients') clients.init();
-                    if(mod === 'accounts') accounts.init();
-                }
+                document.querySelectorAll('[id^="mod-"]').forEach(el => el.classList.add('hidden'));
+                const target = document.getElementById('mod-' + (['invoice'].includes(mod) ? 'invoice_menu' : mod));
+                if(target) target.classList.remove('hidden');
+                
+                document.getElementById('page-title').innerText = mod.toUpperCase().replace('_', ' ');
+                if(mod !== 'dashboard' && mod !== 'invoice_menu') loadData(mod);
+                if(mod === 'clients' || clientList.length === 0) fetchClients();
             }
         };
 
-        // CLIENTS MODULE
+        async function loadData(type) {
+            const tbody = document.getElementById(`table-${type}`);
+            if(tbody) tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center"><div class="inline-block loader"></div></td></tr>';
+            try {
+                const res = await fetch(API_URL + "?type=" + type);
+                const json = await res.json();
+                if(type === 'clients') { clients.render(json.data); clientList = json.data; clients.nextId = json.nextId; } 
+                else if(type === 'credentials') renderCreds(json.data);
+                else if(type === 'compliance') renderComp(json.data);
+                else if(type === 'daybook') { renderDayBook(json.data, 'daybook'); updateSum(json.summary, 'db'); }
+                else if(type === 'accounts') renderDayBook(json.data, 'accounts');
+            } catch(e) { console.error(e); }
+        }
+
+        async function fetchClients() {
+            const res = await fetch(API_URL + "?type=clients");
+            const json = await res.json();
+            clientList = json.data;
+            clients.nextId = json.nextId;
+        }
+
         const clients = {
-            data: [],
-            nextId: "C40000",
-            init: async () => {
-                if(clients.data.length > 0) return;
-                try {
-                    const res = await fetch(API_URL + "?type=clients");
-                    const json = await res.json();
-                    clients.data = json.data;
-                    clients.nextId = json.nextId;
-                    clients.render(clients.data);
-                } catch(e) { console.error(e); }
-            },
             render: (list) => {
                 const tbody = document.getElementById('table-clients');
                 tbody.innerHTML = "";
-                if(list.length === 0) { tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-gray-400">No records</td></tr>`; return; }
-                
                 list.reverse().forEach(c => {
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-red-50/30 border-b border-gray-100 last:border-0 transition";
-                    tr.innerHTML = `
-                        <td class="p-3 font-mono font-bold text-red-700 text-xs">${c.Client_ID}</td>
-                        <td class="p-3">
-                            <div class="font-bold text-slate-800">${c.Client_Name}</div>
-                            <span class="text-[10px] bg-gray-100 px-1 rounded text-gray-500">${c.Branch || '-'}</span>
-                        </td>
-                        <td class="p-3 hidden md:table-cell text-xs text-slate-500">
-                            <div>${c.Mobile_No || '-'}</div>
-                            <div class="truncate w-24">${c.Email || ''}</div>
-                        </td>
-                        <td class="p-3 hidden md:table-cell text-xs font-mono text-slate-600">
-                            ${c.GST_No ? `<div class="text-blue-700 font-bold">G: ${c.GST_No}</div>` : ''}
-                            ${c.Pan_No ? `<div class="text-slate-700">P: ${c.Pan_No}</div>` : ''}
-                        </td>
-                        <td class="p-3 text-center">
-                            ${c.Folder_Link ? `<a href="${c.Folder_Link}" target="_blank" class="text-green-600 hover:scale-110 inline-block transition"><i class="fab fa-google-drive text-lg"></i></a>` : '-'}
-                        </td>
-                        <td class="p-3 text-right">
-                            <button onclick='clients.openModal("edit", ${JSON.stringify(c).replace(/'/g, "&#39;")})' class="text-gray-400 hover:text-red-700 transition"><i class="fas fa-edit"></i></button>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
+                    tbody.innerHTML += `<tr class="border-b hover:bg-gray-50"><td class="p-3 text-red-700 font-bold text-xs">${c.Client_ID}</td><td class="p-3 font-bold">${c.Client_Name}</td><td class="p-3 text-xs hidden md:table-cell">${c.Mobile_No}</td><td class="p-3 text-xs hidden md:table-cell">${c.GST_No||'-'}</td><td class="p-3 text-center"><a href="${c.Folder_Link}" target="_blank" class="text-green-600"><i class="fab fa-google-drive"></i></a></td></tr>`;
                 });
             },
-            openModal: (mode, data = null) => {
+            openModal: (mode) => {
                 document.getElementById('form-client').reset();
                 document.getElementById('modal-client').classList.remove('hidden');
-                if(mode === 'add') {
-                    document.getElementById('client-modal-title').innerText = "New Client Entry";
-                    document.getElementById('Client_ID').value = clients.nextId;
-                    document.getElementById('c-rowIndex').value = "";
-                } else {
-                    document.getElementById('client-modal-title').innerText = "Edit Client Record";
-                    document.getElementById('c-rowIndex').value = data.rowIndex;
-                    Object.keys(data).forEach(k => { if(document.getElementById(k)) document.getElementById(k).value = data[k]; });
-                }
+                if(mode==='add') document.getElementById('Client_ID').value = clients.nextId;
             },
             closeModal: () => document.getElementById('modal-client').classList.add('hidden')
         };
 
-        // ACCOUNTS MODULE
-        const accounts = {
-            data: [],
-            init: async () => {
-                if(accounts.data.length > 0) return;
-                try {
-                    const res = await fetch(API_URL + "?type=accounts");
-                    const json = await res.json();
-                    accounts.data = json.data;
-                    accounts.updateSum(json.summary);
-                    accounts.render(accounts.data);
-                } catch(e) { console.error(e); }
-            },
-            updateSum: (s) => {
-                if(!s) return;
-                document.getElementById('acc-inc').innerText = `₹${s.income.toLocaleString()}`;
-                document.getElementById('acc-exp').innerText = `₹${s.expense.toLocaleString()}`;
-                document.getElementById('acc-bal').innerText = `₹${s.balance.toLocaleString()}`;
-            },
-            render: (list) => {
-                const tbody = document.getElementById('table-accounts');
-                tbody.innerHTML = "";
-                if(list.length === 0) { tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-gray-400">No entries</td></tr>`; return; }
+        function renderCreds(list) {
+            const tb = document.getElementById('table-creds'); tb.innerHTML = "";
+            list.reverse().forEach(r => tb.innerHTML += `<tr class="border-b hover:bg-gray-50"><td class="p-3 font-bold">${r.Client_Name}</td><td class="p-3 text-blue-600">${r.Portal_Name}</td><td class="p-3 font-mono text-gray-500">${r.User_ID}</td><td class="p-3 text-right"><i class="fas fa-ellipsis-v text-gray-300"></i></td></tr>`);
+        }
 
-                list.sort((a,b) => new Date(b.Date) - new Date(a.Date)).forEach(r => {
-                    const isInc = r.Txn_Type === 'Income';
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-red-50/30 border-b border-gray-100 last:border-0 transition";
-                    tr.innerHTML = `
-                        <td class="p-3 text-xs text-gray-500 whitespace-nowrap">${r.Date}</td>
-                        <td class="p-3">
-                            <div class="font-bold text-slate-800 text-xs">${r.Particulars}</div>
-                            <div class="text-[10px] text-gray-400">${r.Category}</div>
-                        </td>
-                        <td class="p-3 text-right font-mono font-bold text-xs ${isInc ? 'text-green-700' : 'text-red-700'}">
-                            ${isInc ? '+' : '-'}₹${Number(r.Amount).toLocaleString()}
-                        </td>
-                        <td class="p-3 text-center text-xs">
-                             ${r.Doc_Link ? `<a href="${r.Doc_Link}" target="_blank" class="text-blue-600 hover:underline"><i class="fas fa-paperclip"></i></a>` : '-'}
-                        </td>
-                        <td class="p-3 text-right">
-                             <button onclick='accounts.openModal("edit", ${JSON.stringify(r).replace(/'/g, "&#39;")})' class="text-gray-400 hover:text-red-700 transition"><i class="fas fa-edit"></i></button>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            },
-            openModal: (mode, data = null) => {
-                document.getElementById('form-account').reset();
-                document.getElementById('Date').valueAsDate = new Date();
-                document.getElementById('modal-account').classList.remove('hidden');
-                if(mode === 'add') {
-                    document.getElementById('acc-modal-title').innerText = "New Transaction";
-                    document.getElementById('a-rowIndex').value = "";
+        function renderComp(list) {
+            const tb = document.getElementById('table-comp'); tb.innerHTML = "";
+            list.reverse().forEach(r => {
+                const statusColor = r.Status === 'Done' ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50';
+                tb.innerHTML += `<tr class="border-b hover:bg-gray-50"><td class="p-3 font-bold">${r.Client_Name}</td><td class="p-3">${r.Service_Description}</td><td class="p-3 text-xs">${r.Due_Date ? r.Due_Date.split('T')[0] : '-'}</td><td class="p-3 text-center"><span class="${statusColor} px-2 py-1 rounded text-[10px] font-bold uppercase">${r.Status}</span></td></tr>`;
+            });
+        }
+
+        function renderDayBook(list, type) {
+            const tb = document.getElementById(`table-${type}`); tb.innerHTML = "";
+            list.sort((a,b) => new Date(b.Date) - new Date(a.Date)).forEach(r => {
+                const amt = Number(r.Amount || r.Total_Amount || 0);
+                const isInc = (r.Type === 'Income' || r.Txn_Type === 'Income');
+                const col = isInc ? 'text-green-600' : 'text-red-600';
+                tb.innerHTML += `<tr class="border-b hover:bg-gray-50"><td class="p-3 text-xs text-gray-500 whitespace-nowrap">${r.Date ? r.Date.split('T')[0] : '-'}</td><td class="p-3 font-bold text-xs">${r.Client_Name || r.Particulars}<br><span class="text-gray-400 font-normal">${r.Description || r.Category || ''}</span></td><td class="p-3 text-right font-mono font-bold ${col}">₹${amt}</td><td class="p-3 text-center text-[10px] uppercase">${isInc ? 'In' : 'Out'}</td></tr>`;
+            });
+        }
+
+        function updateSum(s, p) {
+            if(!s) return;
+            document.getElementById(`${p}-inc`).innerText = `₹${s.income}`;
+            document.getElementById(`${p}-exp`).innerText = `₹${s.expense}`;
+            document.getElementById(`${p}-bal`).innerText = `₹${s.balance}`;
+        }
+
+        function closeModal(id) { document.getElementById('modal-'+id).classList.add('hidden'); }
+        
+        function openGenericModal(type) {
+            const m = document.getElementById('modal-generic');
+            const f = document.getElementById('form-generic');
+            f.reset();
+            ['creds', 'comp', 'money'].forEach(x => document.getElementById('f-'+x).classList.add('hidden'));
+            
+            if(type === 'creds') {
+                document.getElementById('gen-title').innerText = "New Credential";
+                document.getElementById('g-action').value = "addCredential";
+                document.getElementById('f-creds').classList.remove('hidden');
+            } else if (type === 'comp') {
+                document.getElementById('gen-title').innerText = "New Compliance Task";
+                document.getElementById('g-action').value = "addCompliance";
+                document.getElementById('f-comp').classList.remove('hidden');
+            } else if (type === 'daybook' || type === 'accounts') {
+                document.getElementById('gen-title').innerText = type === 'daybook' ? "Day Book Entry" : "Account Entry";
+                document.getElementById('g-action').value = type === 'daybook' ? "addDayBook" : "addTransaction";
+                document.getElementById('f-money').classList.remove('hidden');
+                document.getElementById('g-Date').valueAsDate = new Date();
+                if(type === 'accounts') {
+                    document.getElementById('Description').name = "Particulars";
+                    document.getElementById('Type').name = "Txn_Type";
                 } else {
-                    document.getElementById('acc-modal-title').innerText = "Edit Transaction";
-                    document.getElementById('a-rowIndex').value = data.rowIndex;
-                    Object.keys(data).forEach(k => { 
-                        if(document.getElementById(k)) document.getElementById(k).value = (k === 'Date' && data[k] ? data[k].split('T')[0] : data[k]); 
-                    });
-                    if(data.Client_Name) document.getElementById('a-Client_Name').value = data.Client_Name;
+                    document.getElementById('Description').name = "Description";
+                    document.getElementById('Type').name = "Type";
                 }
-            },
-            closeModal: () => document.getElementById('modal-account').classList.add('hidden')
-        };
+            }
 
-        // SEARCH
-        document.getElementById('search-clients').addEventListener('input', (e) => {
-            const t = e.target.value.toLowerCase();
-            clients.render(clients.data.filter(c => c.Client_Name.toLowerCase().includes(t) || c.Client_ID.toLowerCase().includes(t)));
-        });
-        document.getElementById('search-accounts').addEventListener('input', (e) => {
-            const t = e.target.value.toLowerCase();
-            accounts.render(accounts.data.filter(a => a.Particulars.toLowerCase().includes(t) || (a.Client_Name && a.Client_Name.toLowerCase().includes(t))));
+            const sel = document.getElementById('g-client');
+            sel.innerHTML = '<option value="">Select Client...</option>';
+            clientList.forEach(c => sel.innerHTML += `<option value="${c.Client_ID}">${c.Client_Name}</option>`);
+            m.classList.remove('hidden');
+        }
+
+        function setClientName() {
+            const sel = document.getElementById('g-client');
+            document.getElementById('g-client-name').value = sel.options[sel.selectedIndex].text;
+        }
+
+        document.getElementById('form-generic').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('g-save-btn');
+            btn.innerHTML = 'Saving...'; btn.disabled = true;
+            const obj = Object.fromEntries(new FormData(e.target).entries());
+            obj.action = document.getElementById('g-action').value;
+            obj.Client_ID = document.getElementById('g-client').value;
+            obj.Client_Name = document.getElementById('g-client-name').value;
+            try {
+                await fetch(API_URL, { method: 'POST', body: JSON.stringify(obj) });
+                closeModal('generic');
+                const action = obj.action;
+                if(action.includes('Credential')) loadData('credentials');
+                if(action.includes('Compliance')) loadData('compliance');
+                if(action.includes('DayBook')) loadData('daybook');
+                if(action.includes('Transaction')) loadData('accounts');
+            } catch(err) { alert('Error'); } finally { btn.innerHTML = 'Save'; btn.disabled = false; }
         });
 
-        // FORMS
         document.getElementById('form-client').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('c-save-btn');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...'; btn.disabled = true;
-            const fd = new FormData(e.target); const obj = Object.fromEntries(fd.entries());
-            obj.action = obj.rowIndex ? "editClient" : "addClient";
-            obj.rowIndex = document.getElementById('c-rowIndex').value;
-            
+            const obj = Object.fromEntries(new FormData(e.target).entries());
+            obj.action = "addClient";
             try {
                 await fetch(API_URL, { method: 'POST', body: JSON.stringify(obj) });
-                clients.closeModal(); clients.data = []; clients.init();
-            } catch(err) { alert('Error saving client'); } finally { btn.innerHTML = 'Save Client'; btn.disabled = false; }
+                closeModal('client');
+                loadData('clients');
+                fetchClients();
+            } catch(err) { alert('Error'); }
         });
-
-        document.getElementById('form-account').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('a-save-btn');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...'; btn.disabled = true;
-            const fd = new FormData(e.target); const obj = Object.fromEntries(fd.entries());
-            obj.action = obj.rowIndex ? "editTransaction" : "addTransaction";
-            obj.rowIndex = document.getElementById('a-rowIndex').value;
-
-            try {
-                await fetch(API_URL, { method: 'POST', body: JSON.stringify(obj) });
-                accounts.closeModal(); accounts.data = []; accounts.init();
-            } catch(err) { alert('Error saving transaction'); } finally { btn.innerHTML = 'Save Transaction'; btn.disabled = false; }
-        });
-
     </script>
 </body>
 </html>
